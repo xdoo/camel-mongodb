@@ -33,6 +33,13 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
 
+/**
+ * 
+ * 
+ * @author claus.straube@catify.com
+ * @version 2.5.0
+ *
+ */
 public class MongoDbIdempotentRepository implements
 		IdempotentRepository<String> {
 

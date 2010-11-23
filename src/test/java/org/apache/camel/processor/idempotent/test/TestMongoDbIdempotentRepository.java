@@ -283,6 +283,7 @@ public class TestMongoDbIdempotentRepository extends TestCase {
 		DBCursor cursor = coll.find();
 		while (cursor.hasNext()) {
 			DBObject dbObject = (DBObject) cursor.next();
+			System.out.println(dbObject);
 			coll.remove(dbObject);
 		}
 	}
