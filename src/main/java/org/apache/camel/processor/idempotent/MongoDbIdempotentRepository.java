@@ -34,7 +34,17 @@ import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
 
 /**
- * 
+ * MongoDbIdempotentRepository implements the 
+ * <a href="http://camel.apache.org/idempotent-consumer.html">Idempotent Consumer Pattern</a> (EIP) based on 
+ * <a href="http://camel.apache.org">Apache Camel</a>. You can use this 
+ * class in a camel route (Java DSL) as follows:
+ * </br></br>
+ * <code>
+ *    from("seda:in")
+ *    .routeId("mongodb_idempotent_repository_md5")
+ *    .idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5("localhost", "23000", "my_db", "idempoten_repo"))
+ *    .to("seda:out");
+ * </code>
  * 
  * @author claus.straube@catify.com
  * @version 2.5.0
