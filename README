@@ -1,9 +1,0 @@
-h1 MongoDbIdempotentRepository
-
-MongoDbIdempotentRepository implements the "Idempotent Consumer Pattern":http://camel.apache.org/idempotent-consumer.html (EIP) based on  "Apache Camel":href="http://camel.apache.org. You can use this class in a camel route (Java DSL) as follows:
-
-    from("seda:in")
-    .routeId("mongodb_idempotent_repository_md5")
-    .idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5("localhost", "23000", "my_db", "idempotent_repo"))
-    .to("seda:out");
-
