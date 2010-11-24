@@ -256,7 +256,9 @@ public class TestMongoDbIdempotentRepository extends TestCase {
 		assertEquals(7, coll.count());
 		
 		MongoDbIdempotentRepository mrepo = (MongoDbIdempotentRepository) bean;
-		mrepo.removeMessagesBefore(new Date().getTime() - 500);
+		mrepo.removeMessagesBefore(new Date().getTime() - 400);
+		
+		Thread.sleep(10);
 		
 		assertEquals(3, coll.count());
 		

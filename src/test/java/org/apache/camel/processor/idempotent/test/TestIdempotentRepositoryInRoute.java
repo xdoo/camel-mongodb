@@ -121,7 +121,23 @@ public class TestIdempotentRepositoryInRoute extends CamelTestSupport{
 		}
 		
 		out.expectedMessageCount(runs);
-		out.setResultWaitTime(60000);
+		out.setResultWaitTime(30000);
+		
+		out.assertIsSatisfied();
+	}
+	
+	public void testConcurrentConsumersAndHighLoad() throws InterruptedException{
+		int runs = 5000;
+		
+		MockEndpoint out = getMockEndpoint("mock:out3");
+		
+		for (int i = 0; i < runs; i++) {			
+			template.sendBody("seda:in3", this.getText() + i);
+
+		}
+		
+		out.expectedMessageCount(runs);
+		out.setResultWaitTime(35000);
 		
 		out.assertIsSatisfied();
 	}
@@ -152,6 +168,32 @@ public class TestIdempotentRepositoryInRoute extends CamelTestSupport{
         		.routeId("mongodb_idempotent_repository_md5")
         		.idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5(host1, port1, dbName1, collectionName1))
         		.to("mock:out2");
+        		
+        		/*
+        		 * test concurrent consumers
+        		 */
+        		from("seda:in3")
+        		.multicast().to("seda:m1", "seda:m3", "seda:m3", "seda:m4", "seda:m5");
+        		
+        		from("seda:m1")
+        		.idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5(host1, port1, dbName1, collectionName1))
+        		.to("mock:out3");
+        		
+        		from("seda:m2")
+        		.idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5(host1, port1, dbName1, collectionName1))
+        		.to("mock:out3");
+        		
+        		from("seda:m3")
+        		.idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5(host1, port1, dbName1, collectionName1))
+        		.to("mock:out3");
+        		
+        		from("seda:m4")
+        		.idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5(host1, port1, dbName1, collectionName1))
+        		.to("mock:out3");
+        		
+        		from("seda:m5")
+        		.idempotentConsumer(body() , MongoDbIdempotentRepository.mongoIdempotentRepositoryMd5(host1, port1, dbName1, collectionName1))
+        		.to("mock:out3");
             	
             }
         };
@@ -183,7 +225,7 @@ public class TestIdempotentRepositoryInRoute extends CamelTestSupport{
 	}
 	
 	private String getText(){
-		return "this is a textblock__";
+		return "this is a textblock, that will be concanated with a counter and calculated to a MD5__";
 	
 	}
 
