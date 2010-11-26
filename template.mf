@@ -1,0 +1,5 @@
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.apache.camel.camel-mongodb
+Bundle-Name: camel-mongodb
+Bundle-Vendor: catify
+Bundle-Version: 2.5.0

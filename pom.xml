@@ -49,6 +49,35 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<!-- spring bundlor plugin in order to build OSGi manifest -->
+			<plugin>
+				<groupId>com.springsource.bundlor</groupId>
+				<artifactId>com.springsource.bundlor.maven</artifactId>
+				<version>1.0.0.RELEASE</version>
+				<executions>
+					<execution>
+						<id>bundlor</id>
+						<goals>
+							<goal>bundlor</goal>
+						</goals>
+						<!-- generate the manifest automatically during packaging -->
+						<phase>package</phase>
+					</execution>
+				</executions>
+
+				<!--
+					important work around in order to install the generated manifest to
+					jar file see ticket:
+					https://issuetracker.springsource.com/browse/BNDLR-339
+				-->
+				<configuration>
+					<failOnWarnings>false</failOnWarnings>
+					<removeNullHeaders>true</removeNullHeaders>
+					<inputPath>${basedir}/target/${project.build.finalName}.${project.packaging}</inputPath>
+					<outputPath>${basedir}/target/${project.build.finalName}.${project.packaging}</outputPath>
+					<enabled>${bundlor.enabled}</enabled>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
