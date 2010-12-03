@@ -82,6 +82,8 @@ public class MongoDbIdempotentRepository implements
 			// create a unique index on event id key
 			coll.ensureIndex(new BasicDBObject(EVENTID, 1), "repo_index", true);
 
+                        log.debug("unique index constraint --> " + coll.getIndexInfo());
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (MongoException e) {
